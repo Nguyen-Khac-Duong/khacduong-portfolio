@@ -312,7 +312,7 @@ const rootStaticPath = path.resolve(__dirname, '..');
 app.use(express.static(rootStaticPath));
 app.use(express.static(path.join(rootStaticPath, 'profile')));
 
-app.get('/*', (req, res) => {
+app.use((req, res) => {
     if (req.path.startsWith('/api')) {
         return res.status(404).json({ message: 'API route not found' });
     }
