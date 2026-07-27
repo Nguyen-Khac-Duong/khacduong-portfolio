@@ -10,11 +10,15 @@ console.log('DNS servers configured for MongoDB SRV lookup:', dns.getServers());
 const app = express();
 app.use(express.json());
 app.use(cors());
+app.use((req, res, next) => {
+    console.log(`[${new Date().toISOString()}] ${req.method} ${req.originalUrl}`);
+    next();
+});
 
-const MONGO_URI = 'mongodb+srv://duongkhac284_db_user:Duong123456@cluster0.vslwndy.mongodb.net/portfolio_db?retryWrites=true&w=majority';
-const OWNER_USERNAME = 'duongkhac284@gmail.com';
-const OWNER_PASSWORD = '123456';
-const OWNER_FULLNAME = 'Nguyễn Khắc Dương';
+const MONGO_URI = process.env.MONGO_URI;
+const OWNER_USERNAME = process.env.OWNER_USERNAME;
+const OWNER_PASSWORD = process.env.OWNER_PASSWORD;
+const OWNER_FULLNAME = process.env.OWNER_FULLNAME || OWNER_USERNAME;
 const PORT = process.env.PORT || 5000;
 
 mongoose.set('strictQuery', false);
@@ -24,6 +28,9 @@ mongoose.set('strictQuery', false);
 // -------------------------------------------------------------
 async function connectMongo() {
     try {
+        if (!MONGO_URI) {
+            throw new Error('Missing MONGO_URI environment variable');
+        }
         await mongoose.connect(MONGO_URI, {
             serverSelectionTimeoutMS: 15000
         });
@@ -65,6 +72,9 @@ const Project = mongoose.model('Project', projectSchema);
 // HÀM KHỞI TẠO DỮ LIỆU MẶC ĐỊNH
 // -------------------------------------------------------------
 async function findOrCreateDefaultUser() {
+    if (!OWNER_USERNAME || !OWNER_PASSWORD) {
+        throw new Error('Missing OWNER_USERNAME or OWNER_PASSWORD environment variable');
+    }
     let defaultUser = await User.findOne({ username: OWNER_USERNAME });
     if (!defaultUser) {
         defaultUser = new User({ username: OWNER_USERNAME, password: OWNER_PASSWORD, fullname: OWNER_FULLNAME });
@@ -116,6 +126,15 @@ async function ensureDefaultPortfolio() {
 // -------------------------------------------------------------
 // ROUTES NGƯỜI DÙNG
 // -------------------------------------------------------------
+app.get('/api/health', (req, res) => {
+    res.json({
+        status: 'ok',
+        mongo: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected',
+        uptime: Math.round(process.uptime()),
+        timestamp: new Date().toISOString()
+    });
+});
+
 app.post('/api/register', async (req, res) => {
     try {
         const { username, password, fullname } = req.body;
