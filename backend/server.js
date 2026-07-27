@@ -306,16 +306,17 @@ app.delete('/api/projects/:id', async (req, res) => {
 // START SERVER
 // -------------------------------------------------------------
 // -------------------------------------------------------------
-// Phục vụ frontend React/Static nếu đã deploy cùng backend
+// Phục vụ frontend và tài nguyên tĩnh khi deploy cùng backend
 // -------------------------------------------------------------
-const frontendPath = path.resolve(__dirname, '..', 'profile');
-app.use(express.static(frontendPath));
+const rootStaticPath = path.resolve(__dirname, '..');
+app.use(express.static(rootStaticPath));
+app.use(express.static(path.join(rootStaticPath, 'profile')));
 
 app.get('/*', (req, res) => {
     if (req.path.startsWith('/api')) {
         return res.status(404).json({ message: 'API route not found' });
     }
-    res.sendFile(path.join(frontendPath, 'index.html'));
+    res.sendFile(path.join(rootStaticPath, 'profile', 'index.html'));
 });
 
 async function startServer() {
