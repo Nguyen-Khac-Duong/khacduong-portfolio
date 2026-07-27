@@ -1,4 +1,5 @@
-﻿const express = require('express');
+﻿const path = require('path');
+const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const dns = require('dns');
@@ -14,7 +15,7 @@ const MONGO_URI = 'mongodb+srv://duongkhac284_db_user:Duong123456@cluster0.vslwn
 const OWNER_USERNAME = 'duongkhac284@gmail.com';
 const OWNER_PASSWORD = '123456';
 const OWNER_FULLNAME = 'Nguyễn Khắc Dương';
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
 mongoose.set('strictQuery', false);
 
@@ -304,6 +305,19 @@ app.delete('/api/projects/:id', async (req, res) => {
 // -------------------------------------------------------------
 // START SERVER
 // -------------------------------------------------------------
+// -------------------------------------------------------------
+// Phục vụ frontend React/Static nếu đã deploy cùng backend
+// -------------------------------------------------------------
+const frontendPath = path.resolve(__dirname, '..', 'profile');
+app.use(express.static(frontendPath));
+
+app.get('*', (req, res) => {
+    if (req.path.startsWith('/api')) {
+        return res.status(404).json({ message: 'API route not found' });
+    }
+    res.sendFile(path.join(frontendPath, 'index.html'));
+});
+
 async function startServer() {
     await connectMongo();
     await ensureDefaultPortfolio();
