@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../profile.css">
+    <!-- Thêm Font Awesome để lấy icon Sửa, Xóa đẹp mắt -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Document</title>
+</head>
+
+<body>
+    <header class="navbar">
+        <div class="logo">
+            <h1>Nguyen Khac Duong<span>.Dev</span></h1>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#">Trang chủ</a></li>
+            <li><a href="#skills">Kỹ năng</a></li>
+            <li><a href="#projects">Dự án</a></li>
+            <li><a href="#contact">Liên hệ</a></li>
+            <li class="guest-only guest-nav-item" data-guest-display="inline-flex">
+                <a href="../dangky/dangky.html" class="btn-create-profile-nav">Tạo Profile</a>
+            </li>
+            <!-- Thêm nút Đăng nhập / Đăng xuất động ở đây -->
+            <!-- Thay thế thẻ <li id="auth-nav-item"> cũ bằng cụm này -->
+            <li id="auth-nav-item" class="auth-container">
+                <!-- 2. Hiển thị khi ĐÃ đăng nhập (Mặc định ẩn bằng CSS) -->
+                <div id="user-menu" class="user-menu-dropdown">
+                    <button class="dropdown-trigger" onclick="toggleUserDropdown(event)">
+                        <span class="user-avatar"><i class="fas fa-user-circle"></i></span>
+                        <span class="user-name">Khắc Dương</span>
+                        <i class="fas fa-chevron-down arrow-icon"></i>
+                    </button>
+                    <ul class="dropdown-content" id="dropdown-content">
+                        <li><a href="#skills"><i class="fas fa-magic"></i> Quản lý kỹ năng</a></li>
+                        <li><a href="#projects"><i class="fas fa-tasks"></i> Quản lý dự án</a></li>
+                        <hr class="dropdown-divider">
+                        <li><a href="#" onclick="handleLogout(event)" class="logout-link"><i
+                                    class="fas fa-sign-out-alt"></i> Đăng xuất</a></li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+    </header>
+    <section class="hero">
+        <div class="hero-content">
+            <p class="greeting">XIN CHÀO, MÌNH LÀ</p>
+            <h1 class="name">NGUYỄN KHẮC <span>DƯƠNG</span></h1>
+            <h2 class="job">FullStack Developer</h2>
+            <p class="desc">
+                Hiện tại mình là sinh viên tại UTT. Mình đam mê xây dựng
+                những giao diện tinh tế và có khả năng xử lý dữ liệu lớn.
+            </p>
+            <div class="hero-btns">
+                <a href="#projects" class="btn-primary">Xem dự án</a>
+                <a href="#contact" class="btn-secondary">Liên hệ với mình</a>
+            </div>
+        </div>
+    </section>
+    <section id="skills" class="skills">
+        <h2>Kỹ năng của mình</h2>
+        <div class="skills-flex">
+            <!-- Thêm data-id và nút hành động sửa/xóa vào các skill card -->
+            <div class="skill-card" data-id="skill-1">
+                <div class="card-actions">
+                    <button class="btn-edit" onclick="openEditSkillModal('skill-1')"><i
+                            class="fas fa-edit"></i></button>
+                    <button class="btn-delete" onclick="confirmDelete('skill', 'skill-1')"><i
+                            class="fas fa-trash"></i></button>
+                </div>
+                <i class="icon"></i>
+                <h3>Frontend</h3>
+                <p>HTML, CSS, JAVASCRIPT</p>
+            </div>
+            <div class="skill-card" data-id="skill-2">
+                <div class="card-actions">
+                    <button class="btn-edit" onclick="openEditSkillModal('skill-2')"><i
+                            class="fas fa-edit"></i></button>
+                    <button class="btn-delete" onclick="confirmDelete('skill', 'skill-2')"><i
+                            class="fas fa-trash"></i></button>
+                </div>
+                <i class="icon"></i>
+                <h3>Backend</h3>
+                <p>Java, Python, PHP</p>
+            </div>
+            <div class="skill-card" data-id="skill-3">
+                <div class="card-actions">
+                    <button class="btn-edit" onclick="openEditSkillModal('skill-3')"><i
+                            class="fas fa-edit"></i></button>
+                    <button class="btn-delete" onclick="confirmDelete('skill', 'skill-3')"><i
+                            class="fas fa-trash"></i></button>
+                </div>
+                <i class="icon"></i>
+                <h3>Data</h3>
+                <p>Big Data, PySpark, SQL</p>
+            </div>
+            <div class="skill-card" data-id="skill-4">
+                <div class="card-actions">
+                    <button class="btn-edit" onclick="openEditSkillModal('skill-4')"><i
+                            class="fas fa-edit"></i></button>
+                    <button class="btn-delete" onclick="confirmDelete('skill', 'skill-4')"><i
+                            class="fas fa-trash"></i></button>
+                </div>
+                <i class="icon"></i>
+                <h3>Mobile</h3>
+                <p>Java, Kotlin, Swift</p>
+            </div>
+            <!-- Thẻ thêm kỹ năng mới (Thêm class admin-only) -->
+            <div class="skill-card add-new-skill admin-only">
+                <div class="add-content">
+                    <div class="plus-circle">+</div>
+                    <p>Thêm Kỹ Năng Mới</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="projects" class="projects">
+        <h2>Dự án của mình</h2>
+        <div class="project-flex">
+            <!-- Du an 1 -->
+            <div class="project-card" data-id="prj-1">
+                <div class="card-actions">
+                    <button class="btn-edit" onclick="openEditProjectModal('prj-1')"><i
+                            class="fas fa-edit"></i></button>
+                    <button class="btn-delete" onclick="confirmDelete('project', 'prj-1')"><i
+                            class="fas fa-trash"></i></button>
+                </div>
+                <div class="project-image">
+                    <img src="../image/kien-thuc-co-ban-ve-lap-trinh-web-128427.jpg" alt="Dự án 1">
+                    <div class="project-overlay">
+                        <p class="project-overlay-desc">Hệ thống cửa thông minh sử dụng thẻ từ RFID và ESP8266, tích hợp
+                            quản lý qua Web.</p>
+                        <a href="#" class="btn-view">Xem GitHub</a>
+                    </div>
+                </div>
+                <div class="project-info">
+                    <h3>Smart Door RFID</h3>
+                    <span class="tag">Arduino</span>
+                    <span class="tag">C++</span>
+                </div>
+            </div>
+            <!-- du an 2 -->
+            <div class="project-card" data-id="prj-2">
+                <div class="card-actions">
+                    <button class="btn-edit" onclick="openEditProjectModal('prj-2')"><i
+                            class="fas fa-edit"></i></button>
+                    <button class="btn-delete" onclick="confirmDelete('project', 'prj-2')"><i
+                            class="fas fa-trash"></i></button>
+                </div>
+                <div class="project-image">
+                    <img src="../image/ngon-ngu-lap-trinh-la-gi-3.jpg" alt="Dự án 2">
+                    <div class="project-overlay">
+                        <p class="project-overlay-desc">Phân tích tập dữ liệu Yelp với hàng triệu bản ghi bằng PySpark
+                            trên môi trường Big Data.</p>
+                        <a href="#" class="btn-view">Chi tiết</a>
+                    </div>
+                </div>
+                <div class="project-info">
+                    <h3>Yelp Data Analysis</h3>
+                    <span class="tag">Python</span>
+                    <span class="tag">Big Data</span>
+                </div>
+            </div>
+            <!-- du an 3 -->
+            <div class="project-card" data-id="prj-3">
+                <div class="card-actions">
+                    <button class="btn-edit" onclick="openEditProjectModal('prj-3')"><i
+                            class="fas fa-edit"></i></button>
+                    <button class="btn-delete" onclick="confirmDelete('project', 'prj-3')"><i
+                            class="fas fa-trash"></i></button>
+                </div>
+                <div class="project-image">
+                    <img src="../image/ngon-ngu-lap-trinh-la-gi-3.jpg" alt="Dự án 3">
+                    <div class="project-overlay">
+                        <p class="project-overlay-desc">Phân tích tập dữ liệu Yelp với hàng triệu bản ghi bằng PySpark
+                            trên môi trường Big Data.</p>
+                        <a href="#" class="btn-view">Chi tiết</a>
+                    </div>
+                </div>
+                <div class="project-info">
+                    <h3>Yelp Data Analysis</h3>
+                    <span class="tag">Python</span>
+                    <span class="tag">Big Data</span>
+                </div>
+            </div>
+            <!-- du an 4 -->
+            <div class="project-card" data-id="prj-4">
+                <div class="card-actions">
+                    <button class="btn-edit" onclick="openEditProjectModal('prj-4')"><i
+                            class="fas fa-edit"></i></button>
+                    <button class="btn-delete" onclick="confirmDelete('project', 'prj-4')"><i
+                            class="fas fa-trash"></i></button>
+                </div>
+                <div class="project-image">
+                    <img src="../image/ngon-ngu-lap-trinh-la-gi-3.jpg" alt="Dự án 4">
+                    <div class="project-overlay">
+                        <p class="project-overlay-desc">Phân tích tập dữ liệu Yelp với hàng triệu bản ghi bằng PySpark
+                            trên môi trường Big Data.</p>
+                        <a href="#" class="btn-view">Chi tiết</a>
+                    </div>
+                </div>
+                <div class="project-info">
+                    <h3>Yelp Data Analysis</h3>
+                    <span class="tag">Python</span>
+                    <span class="tag">Big Data</span>
+                </div>
+            </div>
+
+            <!-- Thẻ dự án dùng để thêm mới (Thêm class admin-only) -->
+            <div class="project-card add-new-card admin-only">
+                <div class="add-content">
+                    <div class="plus-circle">+</div>
+                    <p>Thêm Dự Án Mới</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+    <section id="contact" class="contact">
+        <div class="contact-box">
+            <h2>Kết nối với mình</h2>
+            <p>Bạn có ý tưởng hay hoặc muốn hợp tác? Đừng ngần ngại liên hệ nhé!</p>
+
+            <div class="contact-links">
+                <a href="mailto:duongkhac284@gmail.com" class="contact-item">
+                    <i class="icon">📧</i>
+                    <span>Email</span>
+                </a>
+                <a href="github" class="contact-item">
+                    <i class="icon">🐙</i>
+                    <span>GitHub</span>
+                </a>
+                <a href="https://linkedin.com/in/your-profile" class="contact-item">
+                    <i class="icon">💼</i>
+                    <span>LinkedIn</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section guest-only" data-guest-display="flex">
+        <div class="cta-card">
+            <h2 class="cta-title">Bạn muốn sở hữu một Portfolio chuyên nghiệp như thế này?</h2>
+            <p class="cta-description">
+                Chỉ mất 2 phút đăng ký để tạo và quản lý hồ sơ năng lực cá nhân của riêng bạn hoàn toàn miễn phí.
+            </p>
+            <div class="cta-actions">
+                <a href="../dangky/dangky.html" class="btn-cta-primary">Tạo Profile Ngay</a>
+                <a href="#" class="btn-cta-secondary" onclick="openModal('modal-login'); return false;">Đăng Nhập</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2026 Designed & Built by <span>Nguyen Khac Duong</span></p>
+    </footer>
+
+    <!-- ================= HỆ THỐNG MODALS Ở CUỐI TRANG ================= -->
+
+    <!-- 1. MODAL ĐĂNG NHẬP -->
+    <div id="modal-login" class="modal">
+        <div class="modal-content auth-modal">
+            <span class="close-btn" onclick="closeModal('modal-login')">&times;</span>
+            <h2>Đăng Nhập</h2>
+            <!-- Thêm id="form-login" để Validator bắt được form -->
+            <form id="form-login" method="POST">
+                <div class="form-group">
+                    <label for="login-user">Tên đăng nhập:</label>
+                    <!-- Thêm class và id để validator bắt lỗi -->
+                    <input type="text" id="login-user" name="username" required placeholder="Nhập: duongdev">
+                    <!-- Thẻ span để validator tự chèn thông báo lỗi chữ đỏ -->
+                    <span class="form-message"></span>
+                </div>
+                <div class="form-group">
+                    <label for="login-pass">Mật khẩu:</label>
+                    <input type="password" id="login-pass" name="password" required placeholder="Nhập: 123456">
+                    <span class="form-message"></span>
+                </div>
+                <div class="form-btns">
+                    <button type="submit" class="btn-submit" style="width: 100%;">Đăng Nhập Ngay</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 2. MODAL THÊM KỸ NĂNG -->
+    <div id="modal-skill" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('modal-skill')">&times;</span>
+            <h2 id="skill-modal-title">Thêm Kỹ Năng Mới</h2>
+            <form id="form-skill" onsubmit="handleSkillSubmit(event)">
+                <input type="hidden" id="edit-skill-id">
+                <div class="form-group">
+                    <label for="skill-title">Nhóm kỹ năng:</label>
+                    <input type="text" id="skill-title" required placeholder="VD: Frontend, DevOps...">
+                </div>
+                <div class="form-group">
+                    <label for="skill-desc">Các công nghệ (cách nhau bằng dấu phẩy):</label>
+                    <input type="text" id="skill-desc" required placeholder="VD: HTML, CSS, JS...">
+                </div>
+                <div class="form-btns">
+                    <button type="button" class="btn-cancel" onclick="closeModal('modal-skill')">Hủy</button>
+                    <button type="submit" class="btn-submit">Lưu lại</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 3. MODAL THÊM/SỬA DỰ ÁN -->
+    <div id="modal-project" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('modal-project')">&times;</span>
+            <h2 id="project-modal-title">Thêm Dự Án Mới</h2>
+            <form id="form-project" onsubmit="handleProjectSubmit(event)">
+                <input type="hidden" id="edit-project-id">
+                <div class="form-group">
+                    <label for="project-title">Tên dự án:</label>
+                    <input type="text" id="project-title" required placeholder="VD: Smart Door RFID...">
+                </div>
+                <div class="form-group">
+                    <label for="project-desc">Mô tả ngắn:</label>
+                    <textarea id="project-desc" rows="3" required placeholder="Mô tả dự án của bạn..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="project-image">Đường dẫn ảnh:</label>
+                    <input type="text" id="project-image" placeholder="Link ảnh (bỏ trống dùng mặc định)...">
+                </div>
+                <div class="form-group">
+                    <label for="project-tags">Công nghệ (cách nhau bằng dấu phẩy):</label>
+                    <input type="text" id="project-tags" required placeholder="VD: Arduino, C++...">
+                </div>
+                <div class="form-btns">
+                    <button type="button" class="btn-cancel" onclick="closeModal('modal-project')">Hủy</button>
+                    <button type="submit" class="btn-submit">Lưu lại</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 4. MODAL XÁC NHẬN XÓA -->
+    <div id="modal-confirm-delete" class="modal">
+        <div class="modal-content confirm-modal">
+            <h2>Xác Nhận Xóa</h2>
+            <p>Bạn có chắc chắn muốn xóa mục này không? Hành động này không thể hoàn tác!</p>
+            <div class="form-btns">
+                <button type="button" class="btn-cancel" onclick="closeModal('modal-confirm-delete')">Hủy</button>
+                <button type="button" class="btn-submit btn-danger-action" id="btn-confirm-delete-execute">Đồng ý
+                    xóa</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Đầu tiên là bộ thư viện kiểm tra lỗi của bạn -->
+    <script src="../dangnhap/validator.js"></script>
+    <!-- Sau đó là file xử lý logic giao diện của trang -->
+    <script src="profile.js"></script>
+</body>
+
+</html>

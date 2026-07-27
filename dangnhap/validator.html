@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../validator.css">
+    <title>Đăng nhập</title>
+</head>
+<body>
+    <div class="main">
+        <form action="" method="POST" class="form" id="form-1" novalidate>
+            <h3 class="heading">Đăng nhập</h3>
+            <p class="desc">Nhập tài khoản admin để quản lý trang cá nhân</p>
+            <div class="spacer"></div>
+
+            <div class="form-group">
+                <label for="username" class="form-label">Email hoặc tên đăng nhập</label>
+                <input id="username" name="username" class="username" type="text" placeholder="Nhập email hoặc username">
+                <span class="form-message"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="password" class="form-label">Mật khẩu</label>
+                <input id="password" name="password" class="password" type="password" placeholder="Nhập mật khẩu">
+                <span class="form-message"></span>
+            </div>
+
+            <button class="form-submit" type="submit">Đăng Nhập</button>
+        </form>
+    </div>
+
+    <script src="validator.js"></script>
+    <script>
+        Validator({
+            form: '#form-1',
+            formGroupSelector: '.form-group',
+            errorSelector: '.form-message',
+            rules: [
+                Validator.isRequired('#username', 'Vui lòng nhập tên đăng nhập'),
+                Validator.isRequired('#password', 'Vui lòng nhập mật khẩu'),
+                Validator.minLength('#password', 6)
+            ],
+            onSubmit: async function (data) {
+                try {
+                    const response = await fetch('http://localhost:5000/api/login', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            username: data.username,
+                            password: data.password
+                        })
+                    });
+
+                    const result = await response.json();
+
+                    if (response.ok) {
+                        localStorage.setItem('isLoggedIn', 'true');
+                        localStorage.setItem('currentUser', JSON.stringify(result.user));
+                        window.location.href = '../profile/index.html';
+                    } else {
+                        alert(result.message || 'Sai tài khoản hoặc mật khẩu!');
+                    }
+                } catch (err) {
+                    alert('Không thể kết nối tới server backend');
+                }
+            }
+        });
+    </script>
+</body>
+</html>

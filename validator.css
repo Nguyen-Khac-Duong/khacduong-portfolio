@@ -1,0 +1,140 @@
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    animation: fadeIn 0.8s ease-in-out;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    /* Dùng dải màu của bạn nhưng đặt vào body */
+    background: linear-gradient(135deg, #2b3741 0%, #004385 100%);
+    background-attachment: fixed;
+    /* Nền đứng yên khi cuộn, tạo chiều sâu */
+    color: white;
+    overflow-x: hidden;
+    box-sizing: border-box;
+    /* Tránh bị vỡ khung ngang */
+}
+html {
+    scroll-behavior: smooth;
+}
+
+.main{
+    display: block;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 40px 50px;
+    margin: 40px 10%;
+    /* backdrop-filter: blur(10px); */
+    border-radius: 30px;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.03);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+    
+}
+
+.main h3 {
+    text-align: center;
+    color: #7493f8;
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.main .desc{
+    text-align: center;
+    color:#999999;
+    font-size: 15px;
+    margin-bottom: 30px;
+}
+
+.form-group{
+    margin-bottom: 20px;
+}
+
+.form-label{
+    display: block;
+    font-weight: 600;
+    color: #1bb5f7;
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+.form-group input{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    font-size: 14px;
+    color: #2b3741;
+    outline: none;
+    transition: border-color 0.2 ease;
+}
+
+.form-group input ::placeholder{
+    color: #999999;
+}
+.form-group input:focus{
+    border-color: #1bb5f7;
+}
+
+.form-submit{
+    width: 100%;
+    padding: 14px;
+    margin-top: 10px;
+    background: rgba(0, 0, 0, 0.2);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+    
+}
+
+.form-submit:hover {
+    background: rgba(52, 152, 219, 0.15);
+    transform: translateY(-3px);
+}
+
+.form-footer {
+    margin-top: 16px;
+    text-align: center;
+    font-size: 14px;
+    color: #cfd8e3;
+}
+
+.form-footer a {
+    color: #1bb5f7;
+    text-decoration: none;
+    font-weight: 700;
+    transition: color 0.2s ease;
+}
+
+.form-footer a:hover {
+    color: #74b9ff;
+}
+
+.invalid input{
+    border: 1px solid red;
+}
+
+.form-message{
+    color: red;
+    font-size: 12px;
+    font-weight: 400;
+    margin-top: 5px;
+    display: block;
+    margin-left: 10px;
+}

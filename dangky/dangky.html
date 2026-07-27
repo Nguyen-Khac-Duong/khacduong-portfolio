@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../validator.css">
+    <title>Document</title>
+</head>
+<body>
+
+    <div class="main">
+        <form action="" method="POST" class="form" id="form-1">
+            <h3 class="heading">Đăng ký tài khoản</h3>
+            <p class="desc">Vui lòng đăng ký tài khoản để sử dụng</p>
+            <div class="spacer"></div>
+
+            <div class="form-group">
+                <label for="fullname" class="form-label">Tên đầy đủ</label>
+                <input id="fullname" name="fullname" class="fullname" type="text" placeholder="Tên của bạn">
+                <span class="form-message"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="email" class="form-label">Email</label>
+                <input id="email" name="email" class="email" type="text" placeholder="Email đăng nhập">
+                <span class="form-message"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="password" class="form-label">Mật khẩu</label>
+                <input id="password" name="password" class="password" type="password" placeholder="Mật khẩu">
+                <span class="form-message"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="password_confirmation" class="form-label">Nhập lại mật khẩu</label>
+                <input id="password_confirmation" name="password_confirmation" class="password_confimation" type="password" placeholder="Nhập lại mật khẩu">
+                <span class="form-message"></span>
+            </div>
+
+            <button class="form-submit" type="submit">Đăng Ký</button>
+            <div class="form-footer">
+                <p>Bạn đã có tài khoản? <a href="../dangnhap/validator.html">Đăng nhập</a></p>
+            </div>
+        </form>
+
+    </div>
+
+    <script src="dangky.js"></script>
+
+    <script>
+        Validator({
+            form: '#form-1',
+            formGroupSelector: '.form-group',
+            errorSelector: '.form-message',
+            rules: [
+                Validator.isRequired('#fullname', 'Vui lòng nhập tên đầy đủ của bạn'),
+                Validator.isEmail('#email'),
+                Validator.minLength('#password', 6),
+                Validator.isRequired('#password_confirmation', 'Vui lòng nhập lại mật khẩu'),
+                Validator.isConfirmed('#password_confirmation',
+                    function () { return document.querySelector('#form-1 #password').value; },
+                    'Mật khẩu nhập lại không chính xác')
+            ],
+            onSubmit: async function (data) {
+                try {
+                    const response = await fetch('http://localhost:5000/api/register', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            username: data.email,
+                            password: data.password,
+                            fullname: data.fullname
+                        })
+                    });
+
+                    const result = await response.json();
+
+                    if (response.ok) {
+                        alert('Đăng ký thành công!');
+                        window.location.href = '../dangnhap/validator.html';
+                    } else {
+                        alert(result.message || 'Đăng ký thất bại');
+                    }
+                } catch (err) {
+                    alert('Không thể kết nối tới server backend');
+                }
+            }
+        });
+    </script>
+</body>
+</html>
