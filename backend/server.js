@@ -20,6 +20,7 @@ const OWNER_USERNAME = process.env.OWNER_USERNAME;
 const OWNER_PASSWORD = process.env.OWNER_PASSWORD;
 const OWNER_FULLNAME = process.env.OWNER_FULLNAME || OWNER_USERNAME;
 const PORT = process.env.PORT || 5000;
+const APP_VERSION = '2026-07-28-root-route-v1';
 
 mongoose.set('strictQuery', false);
 
@@ -328,14 +329,19 @@ app.delete('/api/projects/:id', async (req, res) => {
 // Phục vụ frontend và tài nguyên tĩnh khi deploy cùng backend
 // -------------------------------------------------------------
 const rootStaticPath = path.resolve(__dirname, '..');
+const profileIndexPath = path.join(rootStaticPath, 'profile', 'index.html');
 app.use(express.static(rootStaticPath));
 app.use(express.static(path.join(rootStaticPath, 'profile')));
+
+app.get(['/', '/profile', '/profile/'], (req, res) => {
+    res.sendFile(profileIndexPath);
+});
 
 app.use((req, res) => {
     if (req.path.startsWith('/api')) {
         return res.status(404).json({ message: 'API route not found' });
     }
-    res.sendFile(path.join(rootStaticPath, 'profile', 'index.html'));
+    res.sendFile(profileIndexPath);
 });
 
 async function startServer() {
@@ -343,6 +349,8 @@ async function startServer() {
     await ensureDefaultPortfolio();
 
     app.listen(PORT, () => {
+        console.log(`APP_VERSION: ${APP_VERSION}`);
+        console.log(`Frontend index path: ${profileIndexPath}`);
         console.log(`🚀 Server Backend đang chạy tại: http://localhost:${PORT}`);
     });
 }
