@@ -24,6 +24,20 @@ const APP_VERSION = '2026-07-28-root-route-v1';
 
 mongoose.set('strictQuery', false);
 
+function getMongoHost(uri) {
+    if (!uri) return 'missing';
+    const match = uri.match(/^mongodb(?:\+srv)?:\/\/(?:[^@]+@)?([^/?]+)/);
+    return match ? match[1] : 'invalid-format';
+}
+
+mongoose.connection.on('disconnected', () => {
+    console.warn('⚠️ MongoDB disconnected');
+});
+
+mongoose.connection.on('error', (err) => {
+    console.error('❌ MongoDB runtime error:', err.message || err);
+});
+
 // -------------------------------------------------------------
 // KẾT NỐI MONGODB
 // -------------------------------------------------------------
@@ -32,6 +46,10 @@ async function connectMongo() {
         if (!MONGO_URI) {
             throw new Error('Missing MONGO_URI environment variable');
         }
+        if (!MONGO_URI.startsWith('mongodb://') && !MONGO_URI.startsWith('mongodb+srv://')) {
+            throw new Error('MONGO_URI must start with mongodb:// or mongodb+srv://');
+        }
+        console.log(`MongoDB target host: ${getMongoHost(MONGO_URI)}`);
         await mongoose.connect(MONGO_URI, {
             serverSelectionTimeoutMS: 15000
         });
